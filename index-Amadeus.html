@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Amadeus SR Command Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+  <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-4">Amadeus SR Command Generator</h2>
+    <p class="text-sm text-gray-600 mb-4">Fill in the fields below to generate the appropriate Amadeus commands.</p>
+    
+    <label class="block mb-2">Passenger Name:</label>
+    <input type="text" id="name" class="w-full p-2 border rounded mb-4" placeholder="e.g. Roger Lu">
+
+    <label class="block mb-2">Email Address:</label>
+    <input type="email" id="email" class="w-full p-2 border rounded mb-4" placeholder="e.g. rogerlu88@roger.com">
+
+    <label class="block mb-2">Phone Number:</label>
+    <input type="tel" id="phone" class="w-full p-2 border rounded mb-4" placeholder="e.g. 4036152322">
+
+    <label class="block mb-2">Segment to Cancel (Optional):</label>
+    <input type="text" id="segment" class="w-full p-2 border rounded mb-4" placeholder="e.g. 2">
+
+    <button onclick="generateCommands()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">Generate Amadeus Commands</button>
+
+    <div id="output" class="mt-6 bg-gray-50 p-4 border rounded text-sm text-gray-800 whitespace-pre-wrap hidden"></div>
+
+    <div class="mt-6 text-xs text-gray-600">
+      <strong>About the Commands:</strong><br>
+      <code>SR CTCE</code>: Enters passenger’s email address.<br>
+      <code>SR CTCM</code>: Enters passenger’s phone number.<br>
+      <code>XE2</code>: Cancels segment number 2 from the itinerary. Replace “2” with any segment number.
+    </div>
+  </div>
+
+  <script>
+    function generateCommands() {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim().replace("@", "/");
+      const phone = document.getElementById("phone").value.trim();
+      const segment = document.getElementById("segment").value.trim();
+
+      let output = "";
+
+      if (name && email) {
+        output += `SR CTCE-${email.toLowerCase()}\n`;
+      }
+
+      if (phone) {
+        output += `SR CTCM-${phone}\n`;
+      }
+
+      if (segment) {
+        output += `XE${segment}  (Cancel segment ${segment})\n`;
+      }
+
+      const outputDiv = document.getElementById("output");
+      outputDiv.innerText = output || "Please fill in required fields.";
+      outputDiv.classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
